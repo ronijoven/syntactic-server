@@ -135,7 +135,18 @@ app.post('/address', (req, res) => main.postTableData(req, res, db, 'address'))
 app.put("/address",  (req, res) => main.putTableData(req, res, db, 'address'))
 
 app.get("/address/col", (req, res) => main.getTableDataByColumn(req, res, db))
-
+app.delete('/api/delete', (req, res) => {
+  var reqData  = req.query;
+  var id = reqData.id
+  var dbname = reqData.dbname
+  db(dbname)
+    .where('id', id)
+    .del()
+    .then(item => {
+      res.json(item)
+    })
+    .catch(err => res.status(400).json({dbError: 'db error (delete) data)'}))
+})
 app.listen(port, () => {
   console.log('Server started on: ' + port);
 });
